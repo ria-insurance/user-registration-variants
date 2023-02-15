@@ -44,8 +44,11 @@ public class UserRegistrationWorkflow implements UserRegistration {
         markRegistrationIntent.recordRegistrationIntent(trackingId);
         log.warn("Calling user details");
         userDetailsRecording.recordUserDetails(new UserContactDetails("some first name", "some last name", "+91-990011199"));
-        unverifiedEmailRecording.acceptUnverifiedEmail(new UnverifiedRegistrationEmail(UUID.fromString(trackingId), "a@test.com"));
+        var unverifiedRegistrationEmail = unverifiedEmailRecording.acceptUnverifiedEmail(new UnverifiedRegistrationEmail(UUID.fromString(trackingId), "a@test.com"));
+        SendVerificationEmail emailWorkflow =
+                Workflow.newChildWorkflowStub(SendVerificationEmail.class);
 
+        emailWorkflow.sendVerificationEmail(unverifiedRegistrationEmail.email());
         return trackingId;
     }
 
