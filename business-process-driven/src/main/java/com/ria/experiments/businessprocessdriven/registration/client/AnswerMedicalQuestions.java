@@ -22,9 +22,11 @@ public class AnswerMedicalQuestions {
         // WorkflowStubs enable calls to methods as if the Workflow object is local, but actually perform an RPC.
        // var workflow = client.newWorkflowStub(AskMedicalQuestions.class, options);
 
+
+
         WorkflowStub untypedWorkflowStub = client.newUntypedWorkflowStub("AskMedicalQuestions",
                 WorkflowOptions.newBuilder()
-                        .setWorkflowId("user-registration-workflow")
+                        .setWorkflowId("medical-questions-workflow")
                         .setTaskQueue(Shared.USER_REGISTRATION_TASK_QUEUE)
                         .build());
 

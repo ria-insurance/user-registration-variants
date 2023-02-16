@@ -7,6 +7,7 @@ import com.ria.experiments.businessprocessdriven.registration.dtos.UnverifiedReg
 import com.ria.experiments.businessprocessdriven.registration.dtos.UserContactDetails;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
+import io.temporal.workflow.ChildWorkflowOptions;
 import io.temporal.workflow.Workflow;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,14 +45,17 @@ public class UserRegistrationWorkflow implements UserRegistration {
         markRegistrationIntent.recordRegistrationIntent(trackingId);
         log.warn("Calling user details");
         userDetailsRecording.recordUserDetails(new UserContactDetails("some first name", "some last name", "+91-990011199"));
-        //var unverifiedRegistrationEmail = unverifiedEmailRecording.acceptUnverifiedEmail(new UnverifiedRegistrationEmail(UUID.fromString(trackingId), "a@test.com"));
-        //SendVerificationEmail emailWorkflow =
-          //      Workflow.newChildWorkflowStub(SendVerificationEmail.class);
+        var unverifiedRegistrationEmail = unverifiedEmailRecording.acceptUnverifiedEmail(new UnverifiedRegistrationEmail(UUID.fromString(trackingId), "a@test.com"));
+        SendVerificationEmail emailWorkflow =
+                Workflow.newChildWorkflowStub(SendVerificationEmail.class);
 
-        //emailWorkflow.sendVerificationEmail(unverifiedRegistrationEmail.email());
+        emailWorkflow.sendVerificationEmail(unverifiedRegistrationEmail.email());
 
+        ChildWorkflowOptions childWorkflowOptions = ChildWorkflowOptions.newBuilder()
+                .setWorkflowId("medical-questions-workflow")
+                .build();
         AskMedicalQuestions medicalQuestionsWorkflow =
-                Workflow.newChildWorkflowStub(AskMedicalQuestions.class);
+                Workflow.newChildWorkflowStub(AskMedicalQuestions.class, childWorkflowOptions);
         medicalQuestionsWorkflow.askMedicalQuestions();
 
 
