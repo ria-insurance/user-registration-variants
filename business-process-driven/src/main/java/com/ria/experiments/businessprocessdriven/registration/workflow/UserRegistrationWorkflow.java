@@ -3,6 +3,7 @@ package com.ria.experiments.businessprocessdriven.registration.workflow;
 import com.ria.experiments.businessprocessdriven.registration.activities.UnverifiedEmailRecording;
 import com.ria.experiments.businessprocessdriven.registration.activities.MarkRegistrationIntent;
 import com.ria.experiments.businessprocessdriven.registration.activities.UserDetailsRecording;
+import com.ria.experiments.businessprocessdriven.registration.dtos.UnderwritingDecision;
 import com.ria.experiments.businessprocessdriven.registration.dtos.UnverifiedRegistrationEmail;
 import com.ria.experiments.businessprocessdriven.registration.dtos.UserContactDetails;
 import io.temporal.activity.ActivityOptions;
@@ -46,8 +47,12 @@ public class UserRegistrationWorkflow implements UserRegistration {
         log.warn("Calling user details");
         userDetailsRecording.recordUserDetails(new UserContactDetails("some first name", "some last name", "+91-990011199"));
         var unverifiedRegistrationEmail = unverifiedEmailRecording.acceptUnverifiedEmail(new UnverifiedRegistrationEmail(UUID.fromString(trackingId), "a@test.com"));
+
+        ChildWorkflowOptions emailChildWorkflowOptions = ChildWorkflowOptions.newBuilder()
+                .setWorkflowId("email-verification-workflow")
+                .build();
         SendVerificationEmail emailWorkflow =
-                Workflow.newChildWorkflowStub(SendVerificationEmail.class);
+                Workflow.newChildWorkflowStub(SendVerificationEmail.class, emailChildWorkflowOptions);
 
         emailWorkflow.sendVerificationEmail(unverifiedRegistrationEmail.email());
 
@@ -56,8 +61,8 @@ public class UserRegistrationWorkflow implements UserRegistration {
                 .build();
         AskMedicalQuestions medicalQuestionsWorkflow =
                 Workflow.newChildWorkflowStub(AskMedicalQuestions.class, childWorkflowOptions);
-        medicalQuestionsWorkflow.askMedicalQuestions();
-
+        UnderwritingDecision underwritingDecision = medicalQuestionsWorkflow.askMedicalQuestions();
+        log.info("Underwriting decision is : "+underwritingDecision);
 
         return trackingId;
     }

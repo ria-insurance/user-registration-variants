@@ -12,12 +12,6 @@ public class AnswerMedicalQuestions {
 
     public static void main(String[] args) {
         WorkflowServiceStubs service = WorkflowServiceStubs.newLocalServiceStubs();
-        WorkflowOptions options = WorkflowOptions.newBuilder()
-                .setTaskQueue(Shared.USER_REGISTRATION_TASK_QUEUE)
-                // A WorkflowId prevents this it from having duplicate instances, remove it to duplicate.
-                .setWorkflowId("medical-questions-workflow")
-                .build();
-        // WorkflowClient can be used to start, signal, query, cancel, and terminate Workflows.
         WorkflowClient client = WorkflowClient.newInstance(service);
         // WorkflowStubs enable calls to methods as if the Workflow object is local, but actually perform an RPC.
        // var workflow = client.newWorkflowStub(AskMedicalQuestions.class, options);

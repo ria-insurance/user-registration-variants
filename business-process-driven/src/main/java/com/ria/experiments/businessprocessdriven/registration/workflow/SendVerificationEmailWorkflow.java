@@ -12,7 +12,7 @@ public class SendVerificationEmailWorkflow implements SendVerificationEmail {
     public String sendVerificationEmail(String emailAddress) {
         log.warn("Sending verification email to: {}", emailAddress);
         while (true) {
-            Workflow.await(() -> !Objects.nonNull(verifiedEmail));
+            Workflow.await(() -> Objects.nonNull(verifiedEmail));
             return verifiedEmail;
         }
     }
