@@ -14,16 +14,18 @@ public class VerifyPhoneNumberFlow {
                     new ParameterDefinition("user_id", ParameterSourceType.CONTEXT, null))
             .withRenderer(new StaticPageRender("/otp/send"))
             .withTask("symphony.base", "aws.otp.generate", TriggerType.ON_SUBMIT,
-                    "SYMPHONY", null)
+                    "CAMUNDA", null)
             .build();
 
     public static final PageConfig VERIFY_OTP_PAGE =
             new PageConfigBuilder("ria.com", "phone/verify/otp")
-            .withParameter("USER_ID",
-                    new ParameterDefinition("user_id", ParameterSourceType.CONTEXT, null))
+                    .withParameter("USER_ID",
+                            new ParameterDefinition("user_id", ParameterSourceType.CONTEXT, null))
+                    .withParameter("OTP_VALUE",
+                            new ParameterDefinition("otp", ParameterSourceType.POST, null))
             .withRenderer(new StaticPageRender("/otp/verify"))
                     .withTask("symphony.base", "aws.otp.verify", TriggerType.ON_SUBMIT,
-                            "SYMPHONY", null)
+                            "CAMUNDA", null)
             .build();
 
     public static final PageConfig VERIFY_OTP_SUCCESS_PAGE =
@@ -31,6 +33,8 @@ public class VerifyPhoneNumberFlow {
             .withParameter("USER_ID",
                     new ParameterDefinition("user_id", ParameterSourceType.CONTEXT, null))
             .withRenderer(new StaticPageRender("/verify/complete"))
+                    .withTask("symphony.base", "aws.otp.success", TriggerType.ON_SUBMIT,
+                            "CAMUNDA", null)
             .build();
 
     public static final PageConfig VERIFY_OTP_FAILED_PAGE =
@@ -38,5 +42,7 @@ public class VerifyPhoneNumberFlow {
             .withParameter("USER_ID",
                     new ParameterDefinition("user_id", ParameterSourceType.CONTEXT, null))
             .withRenderer(new StaticPageRender("/verify/complete"))
+                    .withTask("symphony.base", "aws.otp.failure", TriggerType.ON_SUBMIT,
+                            "CAMUNDA", null)
             .build();
 }

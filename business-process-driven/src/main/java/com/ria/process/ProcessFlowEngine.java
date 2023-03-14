@@ -1,6 +1,5 @@
 package com.ria.process;
 
-import com.ria.experiments.businessprocessdriven.registration.Shared;
 import com.ria.process.engine.CamundaWorkflowEngine;
 import com.ria.process.engine.TemporalWorkflowEngine;
 import com.ria.process.page.ConfigurablePage;
@@ -8,10 +7,6 @@ import com.ria.process.page.PageConfig;
 import com.ria.process.task.ClassifiedTaskList;
 import com.ria.process.task.PageTask;
 import com.ria.process.task.TriggerType;
-import io.temporal.client.WorkflowOptions;
-import io.temporal.client.WorkflowStub;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -35,26 +30,25 @@ public class ProcessFlowEngine {
         // TODO(abhideep): Remove the if-else
         if (TriggerType.ON_LOAD.name().equals(request.getAction())) {
             page.onLoad(context);
-            execute(taskList.getTaskList(TriggerType.ON_LOAD));
+            execute(taskList.getTaskList(TriggerType.ON_LOAD), request);
         } else if (TriggerType.ON_SUBMIT.name().equals(request.getAction())) {
             // TODO(abhideep): Add support for verification
             page.execute(context);
-            execute(taskList.getTaskList(TriggerType.ON_SUBMIT));
+            execute(taskList.getTaskList(TriggerType.ON_SUBMIT), request);
         }
         // Start a process with the given name and return the Process Instance Id
         return null;
     }
 
-    private void execute(List<PageTask> taskList) {
-        // TODO(abhideep): Call the appropriate Workflow Engine here and store the Process Instance Id
+    private void execute(List<PageTask> taskList, ProcessRequest request) {
+        // Call the appropriate Workflow Engine here and store the Process Instance Id
         for (PageTask task : taskList) {
             if (task.getExecutionEngine().equals("Temporal")) {
-                String instanceId = TemporalWorkflowEngine.getTaskExecutor(task.getId()).execute(null);
                 // TODO(abhideep): Save this instance Id somewhere
+                String instanceId = TemporalWorkflowEngine.getTaskExecutor(task.getId())
+                        .execute(TemporalWorkflowEngine.getDataMapper(task.getId()).extract(request));
             } else if (task.getExecutionEngine().equals("Camunda")) {
-                String instanceId = CamundaWorkflowEngine.getTaskExecutor(task.getId()).execute(null);
-                // TODO(abhideep): Save this instance Id somewhere
-
+                // TODO(abhideep): Add Implementation here
             }
         }
     }

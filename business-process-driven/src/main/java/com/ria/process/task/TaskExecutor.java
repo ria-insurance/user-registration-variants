@@ -2,7 +2,7 @@ package com.ria.process.task;
 
 import com.ria.process.ExecutionContext;
 
-public interface TaskExecutor {
+public interface TaskExecutor<T> {
 
-    String execute(ExecutionContext context);
+    String execute(T data);
 }
