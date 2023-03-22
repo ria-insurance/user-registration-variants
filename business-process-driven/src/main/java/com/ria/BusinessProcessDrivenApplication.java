@@ -1,11 +1,12 @@
-package com.ria.experiments.businessprocessdriven;
+package com.ria;
 
+import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
+@SpringBootApplication
+		//(exclude = {DataSourceAutoConfiguration.class })
+@EnableProcessApplication
 public class BusinessProcessDrivenApplication {
 
 	public static void main(String[] args) {

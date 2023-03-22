@@ -4,7 +4,7 @@ public class ApiMethodConfig {
     private final String apiName;
     private final ApiMethodType apiMethodType;
 
-    private final String workflowClass;
+    private final String workflowIdentifier;
     private final String methodName;
     private final WorkflowMethodType methodType;
 
@@ -12,11 +12,11 @@ public class ApiMethodConfig {
     private final DataConverter responseGenerator;
 
     public ApiMethodConfig(String apiName, ApiMethodType apiMethodType,
-                           String workflowClass, String methodName, WorkflowMethodType methodType,
+                           String workflowIdentifier, String methodName, WorkflowMethodType methodType,
                            DataConverter requestConverter, DataConverter responseGenerator) {
         this.apiName = apiName;
         this.apiMethodType = apiMethodType;
-        this.workflowClass = workflowClass;
+        this.workflowIdentifier = workflowIdentifier;
         this.methodName = methodName;
         this.methodType = methodType;
         this.requestConverter = requestConverter;
@@ -31,8 +31,8 @@ public class ApiMethodConfig {
         return apiMethodType;
     }
 
-    public String getWorkflowClass() {
-        return workflowClass;
+    public String getWorkflowIdentifier() {
+        return workflowIdentifier;
     }
 
     public String getMethodName() {
