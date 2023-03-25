@@ -5,7 +5,7 @@
       <bpmn:extensionElements />
       <bpmn:outgoing>Flow_02f9ov6</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Activity_0lwwwj1" name="send OTP" camunda:class="com.ria.process.api.engine.camunda.SendOtpDelegate">
+    <bpmn:serviceTask id="Activity_0lwwwj1" name="send OTP" camunda:class="com.ria.process.api.engine.camunda.workflows.email.SendOtpDelegate">
       <bpmn:incoming>Flow_02f9ov6</bpmn:incoming>
       <bpmn:incoming>Flow_0g3rmdo</bpmn:incoming>
       <bpmn:outgoing>Flow_07xa8hf</bpmn:outgoing>
@@ -16,7 +16,7 @@
       <bpmn:outgoing>Flow_0c3w9g5</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_07xa8hf" sourceRef="Activity_0lwwwj1" targetRef="userEntersOTP" />
-    <bpmn:serviceTask id="Activity_0iv5xs4" name="verify OTP" camunda:class="com.ria.process.api.engine.camunda.VerifyOtpDelegate">
+    <bpmn:serviceTask id="Activity_0iv5xs4" name="verify OTP" camunda:class="com.ria.process.api.engine.camunda.workflows.email.VerifyOtpDelegate">
       <bpmn:incoming>Flow_0c3w9g5</bpmn:incoming>
       <bpmn:outgoing>Flow_0mg6xkn</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -28,7 +28,7 @@
       <bpmn:outgoing>Flow_0g79lg7</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0mg6xkn" sourceRef="Activity_0iv5xs4" targetRef="Gateway_0b5v34d" />
-    <bpmn:sequenceFlow id="Flow_1ej1ck4" sourceRef="Gateway_0b5v34d" targetRef="Event_0q37007">
+    <bpmn:sequenceFlow id="Flow_1ej1ck4" name="valid OTP" sourceRef="Gateway_0b5v34d" targetRef="Event_0q37007">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${otpVerified == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_0q37007" name="email verified">
@@ -38,7 +38,7 @@
       <bpmn:incoming>Flow_0g79lg7</bpmn:incoming>
       <bpmn:outgoing>Flow_1eza1c8</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0g79lg7" sourceRef="Gateway_0b5v34d" targetRef="Activity_08ons1h">
+    <bpmn:sequenceFlow id="Flow_0g79lg7" name="invalid OTP" sourceRef="Gateway_0b5v34d" targetRef="Activity_08ons1h">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${otpVerified == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1eza1c8" sourceRef="Activity_08ons1h" targetRef="Gateway_1ahvi85" />
@@ -47,13 +47,13 @@
       <bpmn:outgoing>Flow_0g3rmdo</bpmn:outgoing>
       <bpmn:outgoing>Flow_0yffupm</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0g3rmdo" sourceRef="Gateway_1ahvi85" targetRef="Activity_0lwwwj1">
+    <bpmn:sequenceFlow id="Flow_0g3rmdo" name="yes" sourceRef="Gateway_1ahvi85" targetRef="Activity_0lwwwj1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${resendOtp==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_1c80exq" name="email not verified">
       <bpmn:incoming>Flow_0yffupm</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0yffupm" sourceRef="Gateway_1ahvi85" targetRef="Event_1c80exq" />
+    <bpmn:sequenceFlow id="Flow_0yffupm" name="no" sourceRef="Gateway_1ahvi85" targetRef="Event_1c80exq" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="emailVerification">
@@ -116,11 +116,17 @@
       <bpmndi:BPMNEdge id="Flow_1ej1ck4_di" bpmnElement="Flow_1ej1ck4">
         <di:waypoint x="805" y="117" />
         <di:waypoint x="882" y="117" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="819" y="99" width="49" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0g79lg7_di" bpmnElement="Flow_0g79lg7">
         <di:waypoint x="780" y="142" />
         <di:waypoint x="780" y="230" />
         <di:waypoint x="600" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="767" y="183" width="57" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1eza1c8_di" bpmnElement="Flow_1eza1c8">
         <di:waypoint x="500" y="230" />
@@ -130,11 +136,17 @@
         <di:waypoint x="385" y="230" />
         <di:waypoint x="320" y="230" />
         <di:waypoint x="320" y="157" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="344" y="212" width="18" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0yffupm_di" bpmnElement="Flow_0yffupm">
         <di:waypoint x="410" y="255" />
         <di:waypoint x="410" y="340" />
         <di:waypoint x="492" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="419" y="295" width="13" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

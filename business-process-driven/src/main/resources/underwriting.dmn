@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="underwritingDmn" name="underwritingDmn" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.8.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <decision id="underwriting" name="underwriting">
+    <decisionTable id="DecisionTable_1garxi2" hitPolicy="FIRST">
+      <input id="Input_1" label="age">
+        <inputExpression id="InputExpression_1" typeRef="integer">
+          <text>age</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0pbi6nl" label="bmi">
+        <inputExpression id="LiteralExpression_11yeafk" typeRef="double">
+          <text>bmi</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="uwResult" typeRef="string" />
+      <rule id="DecisionRule_0fnryro">
+        <inputEntry id="UnaryTests_18y19e4">
+          <text>&lt; 60</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_07pxsv3">
+          <text>&lt; 30</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0jcqot1">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_12w1wt2">
+        <inputEntry id="UnaryTests_0xboeev">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ygtttj">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0wxyurl">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="underwriting">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
