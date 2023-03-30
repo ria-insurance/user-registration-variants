@@ -1,5 +1,6 @@
 package com.ria.process.api.engine.camunda.workflows.proposal;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

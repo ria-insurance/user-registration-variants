@@ -1,6 +1,7 @@
 package com.ria.process.api.controllers;
 
 import com.ria.process.api.config.*;
+import com.ria.process.api.engine.WorkflowEngine;
 import com.ria.process.api.engine.camunda.CamundaEngineProcessor;
 import com.ria.process.api.model.*;
 import lombok.extern.slf4j.Slf4j;
@@ -37,22 +38,22 @@ public class ProposalComposedAPI {
                     map.put("businessKey", UUID.randomUUID().toString());
                     return map;
                 },
-                (DataConverter<String, Response>) input -> Response.success()));
+                (DataConverter<String, Response>) input -> Response.success(), WorkflowEngine.camunda));
         REGISTRY.register(new ApiMethodConfig("/proposal/userDetails", ApiMethodType.POST,
                 "proposalComposed", "enterUserDetails", WorkflowMethodType.INPUT,
                 (DataConverter<UserDetailsRequest, Map<String, Object>>) userDetailsRequest -> Map.of("name", userDetailsRequest.name(),
                         "email", userDetailsRequest.email(),
                         "city", userDetailsRequest.city()
                 ),
-                (DataConverter<String, Response>) input -> Response.success()));
+                (DataConverter<String, Response>) input -> Response.success(), WorkflowEngine.camunda));
         REGISTRY.register(new ApiMethodConfig("/proposal/healthDetails", ApiMethodType.POST,
-                "proposalComposed", "enterHealthDetails", WorkflowMethodType.INPUT,
+                "proposalComposed", "enterHealthDetails", WorkflowMethodType.QUERY,
                 (DataConverter<HealthDetailsRequest, Map<String, Object>>) healthDetailsRequest -> Map.of("age", healthDetailsRequest.age(),
                         "height", healthDetailsRequest.height(),
                         "weight", healthDetailsRequest.weight(),
                         "action", healthDetailsRequest.action()
                 ),
-                (DataConverter<Map<String, Object>, ProposalResponse>) input -> ProposalResponse.success((String) input.get("pageName"))));
+                (DataConverter<Map<String, Object>, ProposalResponse>) input -> ProposalResponse.success((String) input.get("pageName")), WorkflowEngine.camunda));
 
 
 
@@ -88,7 +89,7 @@ public class ProposalComposedAPI {
         String key = request.userId();
         //String runId = runIdMap.get(key);
         String runId =  userFlowMap.get(request.userId(), config.getWorkflowIdentifier());
-        Map<String, Object> result = camundaEngineProcessor.executeAndQuery(request.userId(), config.getWorkflowIdentifier(), config.getMethodName(), runId,
+        Object result = camundaEngineProcessor.executeAndQuery(request.userId(), config.getWorkflowIdentifier(), config.getMethodName(), runId,
                 config.getRequestConverter().convert(request));
         return (ProposalResponse) config.getResponseGenerator().convert(result);
     }

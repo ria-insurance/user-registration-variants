@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class CamundaEngineProcessor {
+public class CamundaEngineProcessor implements com.ria.process.api.engine.EngineProcessor {
 
     @Autowired
     private RuntimeService runtimeService;
@@ -30,6 +30,7 @@ public class CamundaEngineProcessor {
     private UserFlowMap userFlowMap;
 
 
+    @Override
     public String startWorkflow(String userId, String workflowIdentifier, Object context) {
         Map<String, Object> variables = (Map<String, Object>) context;
         //variables.put("businessKey", UUID.randomUUID().toString());
@@ -40,18 +41,21 @@ public class CamundaEngineProcessor {
         return processInstanceId;
     }
 
+    @Override
     public void signalWorkflow(String userId, String workflowName, String methodName, String runId, Object input) {
         findTaskAndComplete(runId, methodName, (Map<String, Object>) input);
         log.info("Process variables are : {}", processVariables(runId));
         userFlowMap.updateForAnyChildProcess(userId, runId);
     }
 
-    public Map<String, Object> executeAndQuery(String userId, String workflowName, String methodName, String runId, Object input) {
+    @Override
+    public Object executeAndQuery(String userId, String workflowName, String methodName, String runId, Object input) {
         findTaskAndComplete(runId, methodName, (Map<String, Object>) input);
 
         Map<String, Object> result = processVariables(runId);
         log.info("Process variables are : {}", result);
         userFlowMap.updateForAnyChildProcess(userId, runId);
+
         return result;
     }
 

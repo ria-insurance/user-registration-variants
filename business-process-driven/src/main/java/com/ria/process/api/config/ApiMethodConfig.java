@@ -1,5 +1,7 @@
 package com.ria.process.api.config;
 
+import com.ria.process.api.engine.WorkflowEngine;
+
 public class ApiMethodConfig {
     private final String apiName;
     private final ApiMethodType apiMethodType;
@@ -10,10 +12,11 @@ public class ApiMethodConfig {
 
     private final DataConverter requestConverter;
     private final DataConverter responseGenerator;
+    private WorkflowEngine workflowEngine;
 
     public ApiMethodConfig(String apiName, ApiMethodType apiMethodType,
                            String workflowIdentifier, String methodName, WorkflowMethodType methodType,
-                           DataConverter requestConverter, DataConverter responseGenerator) {
+                           DataConverter requestConverter, DataConverter responseGenerator, WorkflowEngine workflowEngine) {
         this.apiName = apiName;
         this.apiMethodType = apiMethodType;
         this.workflowIdentifier = workflowIdentifier;
@@ -21,6 +24,7 @@ public class ApiMethodConfig {
         this.methodType = methodType;
         this.requestConverter = requestConverter;
         this.responseGenerator = responseGenerator;
+        this.workflowEngine = workflowEngine;
     }
 
     public String getApiName() {
@@ -49,5 +53,9 @@ public class ApiMethodConfig {
 
     public DataConverter getResponseGenerator() {
         return responseGenerator;
+    }
+
+    public WorkflowEngine workflowEngine() {
+        return workflowEngine;
     }
 }
