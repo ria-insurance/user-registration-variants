@@ -1,5 +1,7 @@
 package com.ria.validator.field;
 
+import com.ria.validator.Validator;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.Map;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class ResolvedFieldValidator<T> {
+public abstract class ResolvedFieldValidator<T> implements Validator<T> {
     private final Map<String, Field> fieldMap = new HashMap<>();
     private final Map<String, FieldValue<?>> fieldValueMap = new HashMap<>();
 

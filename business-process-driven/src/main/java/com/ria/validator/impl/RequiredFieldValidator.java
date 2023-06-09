@@ -11,7 +11,8 @@ import com.ria.validator.field.ResolvedFieldValidator;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class RequiredFieldValidator<T> extends ResolvedFieldValidator<T> implements Validator<T> {
+public class RequiredFieldValidator<T> extends ResolvedFieldValidator<T>
+        implements Validator<T> {
     private final Field field;
 
     public RequiredFieldValidator(Field field) {

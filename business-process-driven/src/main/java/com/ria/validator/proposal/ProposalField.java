@@ -36,7 +36,6 @@ public enum ProposalField implements Field {
         return name();
     }
 
-    // TODO(abhideep): Define an interface for this
     public FieldValueGetter<Proposal, ?> getFieldValueGetter() {
         return accessor;
     }
