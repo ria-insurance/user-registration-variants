@@ -1,7 +1,7 @@
 package com.ria.validator.field;
 
 /**
- * Class that store the value of a Field along with its name.
+ * Class that stores the value of a Field along with its name.
  *
  * @author abhideep@ (Abhideep Singh)
  */
@@ -14,10 +14,16 @@ public class FieldValue<V> {
         this.fieldValue = fieldValue;
     }
 
+    /**
+     * @return Name of the Field.
+     */
     public String getFieldName() {
         return fieldName;
     }
 
+    /**
+     * @return The field name and value pair.
+     */
     public V getFieldValue() {
         return fieldValue;
     }

@@ -6,6 +6,14 @@ package com.ria.validator.field;
  * @author abhideep@ (Abhideep Singh)
  */
 public interface Field {
-    String getNameSpace();
+
+    /**
+     * @return String name of the field.
+     */
     String getFieldName();
+
+    /**
+     * @return Path used to extract the field value.
+     */
+    String getFieldPath();
 }

@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base class for all Validators that are based on values extracted from given data objects.
+ * @param <T> Data object from which field data is extracted.
+ *
+ * @author abhideep@ (Abhideep Singh)
+ */
 public class ResolvedFieldValidator<T> {
     private final Map<String, Field> fieldMap = new HashMap<>();
     private final Map<String, FieldValue<?>> fieldValueMap = new HashMap<>();

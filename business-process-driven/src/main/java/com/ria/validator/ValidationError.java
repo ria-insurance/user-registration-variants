@@ -10,12 +10,12 @@ import java.util.List;
  * @author abhideep@ (Abhideep Singh)
  */
 public class ValidationError {
-    private final int errorCode;
+    private final ErrorCode errorCode;
     private final String message;
     private final String format;
     private final List<Field> fieldList;
 
-    public ValidationError(int errorCode, String errorMessage, Field... fields) {
+    public ValidationError(ErrorCode errorCode, String errorMessage, Field... fields) {
         this.errorCode = errorCode;
         if (fields != null) {
             this.fieldList = List.of(fields);
@@ -42,6 +42,6 @@ public class ValidationError {
     }
 
     public int getErrorCode() {
-        return errorCode;
+        return errorCode.getCode();
     }
 }
